@@ -8,7 +8,8 @@ const kafka = new Kafka({
   brokers: ['localhost:9092']
 })
 createPartitions(kafka);
-consuming(kafka);
+consuming(kafka, 1);
+consuming(kafka, 2);
 producing(kafka)
     .then((producer)=>{
         let timerId = setInterval(() =>{
