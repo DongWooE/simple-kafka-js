@@ -1,11 +1,13 @@
 const { Kafka } = require('kafkajs')
 const {producing} = require('./producer');
 const {consuming} = require('./consumer');
+const {createPartitions} = require('./admin');
 
 const kafka = new Kafka({
   clientId: 'my-app',
   brokers: ['localhost:9092']
 })
+createPartitions(kafka);
 consuming(kafka);
 producing(kafka)
     .then((producer)=>{
@@ -18,7 +20,9 @@ producing(kafka)
                 ],
               })
         }, 2000);
-        setTimeout(() => { clearInterval(timerId); console.log('정지'); }, 10000);
+        setTimeout(async() => { clearInterval(timerId); console.log('정지');
+        await producer.disconnect();
+    }, 10000);
     })
     .catch((error)=>console.log(error))
 
